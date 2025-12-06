@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <title>Alertas - GasGuard IA</title>
+</head>
+<body>
+    <h1>Alertas</h1>
+
+    <ul>
+        <li>⚠️ Você está se aproximando de um posto mal avaliado.</li>
+        <li>⚠️ Posto X recebeu 3 novas denúncias hoje.</li>
+        <li>🚨 Gasolina adulterada confirmada por vários relatos.</li>
+    </ul>
+
+    <p><a href="index.html">Voltar</a></p>
+</body>
+</html>
