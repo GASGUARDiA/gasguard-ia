@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GasGuard IA - Mapa</title>
+
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* CARD DO POSTO */
+        #cardPosto {
+            display: none;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 15px 15px 0 0;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
+        }
+
+        #cardPosto h2 {
+            margin: 0;
+            color: #0A1A2F;
+        }
+
+        .btn-card {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            font-size: 16px;
+            margin-top: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .ver {
+            background: #1E90FF;
+            color: white;
+        }
+
+        .denunciar {
+            background: #ff4d4d;
+            color: white;
+        }
+    </style>
+
+    <!-- GOOGLE MAPS SCRIPT (trocar SUA_CHAVE_API) -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=SUA_CHAVE_API"></script>
+</head>
+<body>
+
+    <div id="map"></div>
+
+    <!-- CARD DO POSTO -->
+    <div id="cardPosto">
+        <h2 id="postoNome">Nome do posto</h2>
+        <p><strong>Nota:</strong> <span id="postoNota"></span>/5</p>
+        <p><strong>Suspeita de adulteração:</strong> <span id="postoSuspeita"></span>%</p>
+        <p><strong>Comentários recentes:</strong></p>
+        <p id="postoComentarios"></p>
+
+        <button class="btn-card ver">Ver avaliações</button>
+        <button class="btn-card denunciar">Denunciar posto</button>
+    </div>
+
+    <script>
+        function initMap() {
+            const posicaoInicial = { lat: -15.5, lng: -47.3 }; // Formosa-GO (base)
+
+            const map = new google.maps.Map(document.getElementById("map"), {
+                center: posicaoInicial,
+                zoom: 13,
+                styles: [
+                    { elementType: "geometry", stylers: [{ color: "#1a2639" }] },
+                    { elementType: "labels.text.fill", stylers: [{ color: "#ffffff" }] },
+                    { elementType: "labels.text.stroke", stylers: [{ color: "#1a2639" }] }
+                ]
+            });
+
+            // POSTOS EXEMPLO (depois vamos ligar no banco de dados)
+            const postos = [
+                {
+                    nome: "Posto Alvorada",
+                    nota: 4.7,
+                    suspeita: 10,
+                    comentarios: "Gasolina boa, consumo normal.",
+                    pos: { lat: -15.51, lng: -47.31 },
+                    cor: "green"
+                },
+                {
+                    nome: "Posto JK",
+                    nota: 2.1,
+                    suspeita: 80,
+                    comentarios: "Carro falhando após abastecer.",
+                    pos: { lat: -15.53, lng: -47.33 },
+                    cor: "red"
+                },
+                {
+                    nome: "Posto Brasil",
+                    nota: 3.0,
+                    suspeita: 40,
+                    comentarios: "Alguns relatos de gasolina fraca.",
+                    pos: { lat: -15.52, lng: -47.29 },
+                    cor: "yellow"
+                }
+            ];
+
+            postos.forEach(posto => {
+                const marcador = new google.maps.Marker({
+                    position: posto.pos,
+                    map: map,
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 10,
+                        fillColor: posto.cor,
+                        fillOpacity: 1,
+                        strokeWeight: 1,
+                        strokeColor: "#ffffff"
+                    }
+                });
+
+                marcador.addListener("click", () => {
+                    document.getElementById("postoNome").innerText = posto.nome;
+                    document.getElementById("postoNota").innerText = posto.nota;
+                    document.getElementById("postoSuspeita").innerText = posto.suspeita;
+                    document.getElementById("postoComentarios").innerText =
+                        posto.comentarios;
+
+                    document.getElementById("cardPosto").style.display = "block";
+                });
+            });
+        }
+
+        window.onload = initMap;
+    </script>
+
+</body>
+</html>
